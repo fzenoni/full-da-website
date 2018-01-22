@@ -1,3 +1,6 @@
 [submodule "public"]
 	path = public
-	url = https://github.com/fzenoni/da-website.git
+	url = https://github.com/fzenoni/da-website
+[submodule "themes/ghostwriter"]
+	path = themes/ghostwriter
+	url = https://github.com/jbub/ghostwriter
