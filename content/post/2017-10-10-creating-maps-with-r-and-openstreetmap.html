@@ -1,0 +1,150 @@
+---
+title: Creating maps with R and OpenStreetMap (1)
+author: Florian Zenoni
+date: '2017-10-10'
+categories:
+  - OpenStreetMap
+  - R
+tags:
+  - OpenStreetMap
+  - sf
+  - tmap
+  - osmdata
+slug: creating-maps-with-r-and-openstreetmap
+---
+
+
+
+<div id="github" class="section level3">
+<h3>GitHub</h3>
+<p>The code for the herein described process can also be freely downloaded from <a href="https://github.com/fzenoni/bcr-map" class="uri">https://github.com/fzenoni/bcr-map</a>.</p>
+</div>
+<div id="drawing-maps-with-r" class="section level2">
+<h2>Drawing maps with R</h2>
+<p>In the last few years the R community has done big steps in providing friendly tools to manipulate tables extended by geographical information. The need to display such information in a simple way, coupled with the prescriptions of <em>tidy data</em> summarized by Hadley Wickham (<a href="https://www.jstatsoft.org/article/view/v059i10" class="uri">https://www.jstatsoft.org/article/view/v059i10</a>) led to the development of R packages such as <a href="https://cran.r-project.org/package=sf"><code>sf</code></a> and <a href="https://cran.r-project.org/package=tmap"><code>tmap</code></a>, as well as considerable improvement of the well-known R graphic library, <a href="https://cran.r-project.org/package=ggplot2"><code>ggplot2</code></a>. Moreover, it is a celebrated fact that data has never been more available than today: thanks to the <a href="https://cran.r-project.org/package=osmdata"><code>osmdata</code></a> package, it is now also easier than ever to extract geographical information from OpenStreetMap (OSM) databases, while staying in the R ecosystem. This package acts as a smart interface between the user and the dreaded official OSM query language, called Overpass.</p>
+<p>With this geographical “holy trinity” in the making at our disposal (even though <code>tmap</code> still silently makes conversions from <code>sf</code> to the older <a href="https://cran.r-project.org/package=sp"><code>sp</code></a> objects), it is therefore possible for beginner users to set-up fast, but also <em>reproducible</em> workflows. In fact, when dealing with Geographical Information Systems (GIS) a traditional approach consists in opening a GIS program with a GUI, such as QGIS or ArcGIS, and start clicking around one’s way through the building of an appropriate map. The R tools at our disposal, in turn, allow the user to keep full track of his or her actions, maintain this track and share it with other users.</p>
+<p>As an exercise, I’m going to display the boundaries of the municipalities located in the Belgian region of Brussels-Capital. Despite the fact that the workflow is rather linear on paper, some <em>caveats</em> and a critical approach are still necessary, and this is what motivated me to write this blog post. My approach to this matter is certainly not original, and I don’t expect to teach anything new to the more experienced R users. On the contrary, real R beginners may struggle in following some of the language shortcuts.</p>
+<p>So, let’s start.</p>
+</div>
+<div id="extraction-of-the-political-boundaries" class="section level2">
+<h2>Extraction of the political boundaries</h2>
+<p>To identify our region of interest, we must know a few definitions. As we decided to access the OSM database, we must use whatever key and values are the most used by the community. Administrative boundaries are not internationally defined in a unique way, so we must check how specific countries deal with these different levels. The reference webpage is the following: <a href="http://wiki.openstreetmap.org/wiki/Tag:boundary%3Dadministrative">http://wiki.openstreetmap.org/wiki/Tag:boundary%3Dadministrative</a>. We’re then able to find out that Belgian municipalities are described by level 8.</p>
+<pre class="r"><code>boundaries &lt;- opq(bbox = &#39;Brussels, Belgium&#39;) %&gt;%
+  add_osm_feature(key = &#39;admin_level&#39;, value = &#39;8&#39;) %&gt;% 
+  osmdata_sf %&gt;% unique_osmdata</code></pre>
+<p>We can now extract the actual geometrical boundaries from this object…</p>
+<pre class="r"><code>municipalities &lt;- boundaries$osm_multipolygons</code></pre>
+<p>… And quickly display it thanks to the <code>tmap::qtm()</code> function.</p>
+<pre class="r"><code>qtm(municipalities)</code></pre>
+<p><img src="/post/2017-10-10-creating-maps-with-r-and-openstreetmap_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+</div>
+<div id="filtering-the-municipalities" class="section level2">
+<h2>Filtering the municipalities</h2>
+<div id="a-naive-strategy" class="section level3">
+<h3>A naive strategy</h3>
+<p>This seems like a lot of towns, certainly too much for the sole Brussels-Capital Region! Indeed I queried objects inside some rectangular bounding box of the city, defined by Overpass itself. In an ideal world however, we could filter the 19 relevant commune’s names by selecting for instance their postcodes. We know that postcodes inside Brussels Region are included between 1000 and 1210.</p>
+<pre class="r"><code># Unfactor addr.postcode column
+municipalities &lt;- municipalities %&gt;% mutate(addr.postcode = as.character(addr.postcode))
+municipalities &lt;- municipalities %&gt;% mutate(addr.postcode = as.numeric(addr.postcode))
+# Filter table
+filtered_bxl &lt;- municipalities %&gt;% filter(addr.postcode &gt;= 1000 &amp; addr.postcode &lt;= 1210)
+qtm(filtered_bxl)</code></pre>
+<p><img src="/post/2017-10-10-creating-maps-with-r-and-openstreetmap_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<p>But this is not good either! Indeed, let’s have a look at the original dataset. For the sake of space I’ll only show the first few entries.</p>
+<pre class="r"><code>table &lt;- municipalities
+# Remove geometry from table
+st_geometry(table) &lt;- NULL
+kable(head(table[, c(&#39;name&#39;, &#39;addr.postcode&#39;)]))</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="right">addr.postcode</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Saint-Gilles - Sint-Gillis</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="left">Forest - Vorst</td>
+<td align="right">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">Ixelles - Elsene</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="left">Etterbeek</td>
+<td align="right">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">Uccle - Ukkel</td>
+<td align="right">1180</td>
+</tr>
+<tr class="even">
+<td align="left">Anderlecht</td>
+<td align="right">NA</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="other-boundaries-to-the-rescue" class="section level3">
+<h3>Other boundaries to the rescue</h3>
+<p>First lesson learnt. We easily notice that, as it often happens when scraping online data, information is incomplete, and many postcodes are missing. Since we do trust the geographical information reported by OSM, we therefore need to think of another strategy, independent of whatever other information OSM databases may or may not include. In the first query we specified the number 8, corresponding for Belgium to the administrative level of Municipalities. As regions are identified by number 4, we can rely on that one to select more precisely our boundaries of interest.</p>
+<pre class="r"><code>regions &lt;- opq(bbox = &#39;Brussels, Belgium&#39;) %&gt;%
+  add_osm_feature(key = &#39;admin_level&#39;, value = &#39;4&#39;) %&gt;% 
+  osmdata_sf %&gt;% unique_osmdata</code></pre>
+<pre class="r"><code>bxl_region &lt;- regions$osm_multipolygons %&gt;% filter(osm_id == &#39;54094&#39;)
+qtm(bxl_region)</code></pre>
+<p><img src="/post/2017-10-10-creating-maps-with-r-and-openstreetmap_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
+<p>Now we have the shape of Brussels-Capital, but how do extract the municipalities inside of these boundaries? The general, documented way to perform such an operation is trivial.</p>
+<pre class="r"><code>qtm(municipalities[bxl_region, ]) +
+  tm_shape(bxl_region) + tm_borders(col = &#39;red&#39;) # Overlay Brussels region borders in red</code></pre>
+<p><img src="/post/2017-10-10-creating-maps-with-r-and-openstreetmap_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
+<p>Unfortunately, it seems that municipalities immediately outside of the Brussels region (whose borders are highlighted in red for clarity) are still included. This is probably due to the inclusion of the lines common to internal and external municipalities, and the entire polygons that includes them.</p>
+</div>
+<div id="two-options" class="section level3">
+<h3>Two options</h3>
+<p>At this point, there may be a few different options. At first, I decided to go through explicit intersection of polygons. However, we need valid polygons in order to do that (and OSM polygons are invalid more often than not). In order to fix broken polygons, you will need to link the <code>sf</code> package against the <em>liblwgeom</em> library installed for your machine. I’ve never managed to install this library on Windows, so leave your solution in the comments if you know how to do it! In any case we’re going to project the map on the appropriate CRS (ETRS89 / Belgian Lambert 2008). The output of the intersection partially consists in line strings, as I suspected from the default subset operation. We don’t need them for the display, so we identify and exclude them. The following works.</p>
+<pre class="r"><code>municipalities &lt;- st_transform(municipalities, 3812)
+bxl_region &lt;- st_transform(bxl_region, 3812)
+# Fix the polygons before the intersection, or it will fail
+if(!all(st_is_valid(municipalities))) {
+  municipalities &lt;- municipalities %&gt;% st_make_valid()
+}
+bxl_municipalities &lt;- st_intersection(municipalities, bxl_region)
+# Select the polygons. The elements with an index greater than 19 are linestrings.
+bxl_municipalities_poly &lt;- bxl_municipalities[1:19, ]</code></pre>
+<p>Later however, I realized that it was also possible to compute a <em>negative buffer</em> from a polygon, which may represent a more compact, if not “softer”, option in this case, which I adopt.</p>
+<pre class="r"><code>neg_buffer &lt;- st_buffer(bxl_region, -100) # in meters
+bxl_municipalities_poly &lt;- municipalities[neg_buffer, ]</code></pre>
+</div>
+</div>
+<div id="final-act" class="section level2">
+<h2>Final act</h2>
+<p>At this point we can make use of one of the two <code>bxl_municipalities_poly</code> objects that we computed, as they are identical.</p>
+<pre class="r"><code># Drop the municipalities factors excluded from the latest subset operations
+# or they will appear in the legend.
+bxl_municipalities_poly &lt;- bxl_municipalities_poly %&gt;% mutate(name = droplevels(name))
+tm_shape(bxl_municipalities_poly) +
+  tm_polygons(title = &#39;Municipalities&#39;, col = &#39;name&#39;) +
+  tm_layout(legend.outside = TRUE)</code></pre>
+<p><img src="/post/2017-10-10-creating-maps-with-r-and-openstreetmap_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
+<p>That’s it! We can make the map a little prettier by adding some details. Also, colors could be improved.</p>
+<pre class="r"><code>tm_style_col_blind() +
+  tm_shape(bxl_municipalities_poly) +
+  tm_polygons(title = &#39;Brussels Capital Municipalities&#39;, border.col = &#39;grey40&#39;, col = &#39;name&#39;, alpha = 0.6) +
+  tm_shape(bxl_region) + tm_borders(col = &#39;grey20&#39;, lwd = 2, alpha = 0.8) +
+  tm_layout(legend.outside = TRUE, frame.double.line = TRUE) +
+  tm_grid(projection = &#39;longlat&#39;, n.x = 5) + tm_scale_bar() +
+  tm_compass(position = c(&#39;right&#39;, &#39;top&#39;))</code></pre>
+<p><img src="/post/2017-10-10-creating-maps-with-r-and-openstreetmap_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
+<p>I’m still not completely satisfied, but with more time and some more experience in data visualization things could be improved. Anyway, it’s a good start.</p>
+<p>On the next episode we’ll see how to deal with a port city: how can we display the coastline?</p>
+</div>
+<div id="acknowledgements" class="section level2">
+<h2>Acknowledgements</h2>
+<p>I would like to thank Timo Grossenbacher (<a href="https://timogrossenbacher.ch" class="uri">https://timogrossenbacher.ch</a>) for the public release of his “template for bootstrapping reproducible RMarkdown documents for data journalistic purposes”. You may clone it from here: <a href="https://github.com/grssnbchr/rddj-template" class="uri">https://github.com/grssnbchr/rddj-template</a>.</p>
+</div>
