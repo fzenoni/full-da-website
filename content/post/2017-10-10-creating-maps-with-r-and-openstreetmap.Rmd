@@ -18,7 +18,7 @@ slug: creating-maps-with-r-and-openstreetmap
 user_name <- "fzenoni" # your Git username (only needed if
 # you want to deploy to GH pages)
 project_name <- "bcr-map" # adapt!
-package_date <- "2018-01-10" # date of the CRAN snapshot that
+package_date <- "2017-11-09" # date of the CRAN snapshot that
 # the checkpoint package uses
 ```
 
@@ -66,14 +66,22 @@ if ( is.null(path_to_wd) | !dir.exists(path_to_wd)) {
 # from https://mran.revolutionanalytics.com/web/packages/checkpoint/vignettes/using-checkpoint-with-knitr.html
 # if you don't need a package, remove it from here (commenting is probably not sufficient)
 # tidyverse: see https://blog.rstudio.org/2016/09/15/tidyverse-1-0-0/
-cat("
+if(Sys.info()['sysname'] == 'Windows') {
+  cat("
 library(dplyr)
-library(knitr)
 library(osmdata)
 library(sf)
 library(tmap)
 library(lwgeom)",
-  file = "manifest.R")
+    file = "manifest.R")
+} else {
+  cat("
+library(dplyr)
+library(osmdata)
+library(sf)
+library(tmap)",
+    file = "manifest.R")
+}
 ```
 
 ```{r message=FALSE, warning=FALSE, include=FALSE}
@@ -165,7 +173,7 @@ But this is not good either! Indeed, let's have a look at the original dataset. 
 table <- municipalities
 # Remove geometry from table
 st_geometry(table) <- NULL
-kable(head(table[, c('name', 'addr.postcode')]))
+knitr::kable(head(table[, c('name', 'addr.postcode')]))
 ```
 
 ### Other boundaries to the rescue
