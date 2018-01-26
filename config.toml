@@ -45,7 +45,7 @@ profile = "https://linkedin.com/in/florianzenoni/"
 # [[menu.main]]
 #     name = "Projects"
 #     url = "/project/"
-#    weight = 2
+#     weight = 2
 
 [[menu.main]]
     name = "Contact"
