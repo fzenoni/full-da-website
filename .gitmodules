@@ -4,3 +4,6 @@
 [submodule "themes/ghostwriter"]
 	path = themes/ghostwriter
 	url = https://github.com/jbub/ghostwriter
+[submodule "themes/test"]
+	path = themes/test
+	url = https://github.com/majvdvel/ghostwriter.git

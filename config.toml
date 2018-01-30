@@ -1,15 +1,15 @@
 baseurl = "/"
 title = "Data Analytics"
-theme = "ghostwriter"
+theme = "test"
 languageCode = "en-us"
-copyright = "Florian Zenoni"
+copyright = "Altran"
 disqusShortname = "XXX"
 googleAnalytics = "XXX"
 ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
 
 [Author]
-name = "Florian Zenoni"
-profile = "https://linkedin.com/in/florianzenoni/"
+# name = "Data Analytics team at Altran Belgium"
+# profile = "https://linkedin.com/in/florianzenoni/"
 
 [Taxonomies]
     tag = "tags"
