@@ -2,8 +2,10 @@ baseurl = "/"
 title = "Data Analytics"
 theme = "test"
 languageCode = "en-us"
-copyright = "Altran"
-disqusShortname = "XXX"
+copyright = "Altran Belgium"
+disqusShortname = "Manneken-Data"
+disqus_identifier = "disqus_identifier"
+disqus_title = "disqus_title"
 googleAnalytics = "XXX"
 ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
 
@@ -16,7 +18,7 @@ ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
 
 [Params]
     intro = true
-    headline = "Data Analytics & Co."
+    headline = "Data Analytics at Altran Belgium"
     description = "Engineering, data, maps!"
     # github = "https://github.com/fzenoni"
     # gitlab = "https://gitlab.com/XXX"

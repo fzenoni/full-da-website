@@ -5,7 +5,7 @@ author = "Data Analytics & Co."
 description = "About Altran and about our team"
 +++
 
-# About Altran
+# About Altran Group and Altran Belgium
 As a global leader in Engineering and R&D services (ER&D), Altran offers its clients a new way to innovate by developing the products and services of tomorrow. Altran works alongside its clients on every link in the value chain of their project, from conception to industrialization. For over thirty years, the Altran Group has provided its expertise to key players in the Aerospace, Automotive, Defence, Energy, Finance, Life Sciences, Railway, and Telecoms sectors, among others.
 
 ## About Intelligent Systems and Data Analytics
