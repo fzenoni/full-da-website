@@ -3,15 +3,37 @@ title = "Data Analytics"
 theme = "test"
 languageCode = "en-us"
 copyright = "Altran Belgium"
-disqusShortname = "Manneken-Data"
-disqus_identifier = "disqus_identifier"
-disqus_title = "disqus_title"
+disqusShortname = "altran-data-analytics"
+disqus_identifier = "altran-da"
+disqus_title = "Altran Data Analytics"
 googleAnalytics = "XXX"
 ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
 
 [Author]
 # name = "Data Analytics team at Altran Belgium"
 # profile = "https://linkedin.com/in/florianzenoni/"
+
+[privacy]
+  [privacy.disqus]
+    disable = false
+  [privacy.googleAnalytics]
+    anonymizeIP = false
+    disable = false
+    respectDoNotTrack = false
+    useSessionStorage = false
+  [privacy.instagram]
+    disable = false
+    simple = false
+  [privacy.speakerDeck]
+    disable = false
+  [privacy.twitter]
+    disable = false
+    enableDNT = false
+  [privacy.vimeo]
+    disable = false
+  [privacy.youtube]
+    disable = false
+    privacyEnhanced = false
 
 [Taxonomies]
     tag = "tags"
