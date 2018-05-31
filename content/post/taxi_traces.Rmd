@@ -3,12 +3,13 @@ title: "Viewing and analysing GPS traces with R"
 author: Stefano Orani
 profile: https://linkedin.com/in/stefano-orani/
 date: "2018-01-10"
-bibliography: input/bibliography.bib
+bibliography: taxi-data/bibliography.bib
 categories:
   - OpenStreetMap
   - R
 tags:
   - OpenStreetMap
+  - R
   - sf
   - tmap
   - osmdata
@@ -20,7 +21,7 @@ tags:
 user_name <- "osteso" # your Git username (only needed if
 # you want to deploy to GH pages)
 project_name <- "taxi_traces" # adapt!
-package_date <- "2018-01-10" # date of the CRAN snapshot that
+package_date <- "2018-05-18" # date of the CRAN snapshot that
 # the checkpoint package uses
 ```
 
@@ -72,9 +73,9 @@ if ( is.null(path_to_wd) | !dir.exists(path_to_wd)) {
 cat("
 library(data.table)
 library(ggplot2)
-library(knitr)
 library(osmdata)
 library(sf)
+library(lwgeom)
 library(tmap)
 library(rgdal)
 library(leaflet)",
@@ -147,7 +148,7 @@ We will use the following R packages:
 # library(osmdata)
 # library(tmap)
 
-traces <- readRDS("./input/data.rds")
+traces <- readRDS("./taxi-data/data.rds")
 ```
 
 ## Get familiar with the data
@@ -155,7 +156,7 @@ traces <- readRDS("./input/data.rds")
 To save time, I already prepared a data.table with the following columns: taxi_id, time, longitude and latitude:
 
 ```{r}
-kable(head(traces))
+knitr::kable(head(traces))
 ```
 
 We can start by adding some useful information to it, such as time interval, distance and average speed between successive points for a given taxi driver:
