@@ -1,6 +1,7 @@
 ---
 title: Traffic and accidents in the United Kingdom
 author: Stefano Orani
+profile: https://www.linkedin.com/in/stefano-orani
 date: '2018-04-23'
 categories:
   - Descriptive statistics

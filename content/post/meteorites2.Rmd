@@ -1,6 +1,7 @@
 ---
 title: Meteorites (2)
 author: Mattias Van de Velde
+profile: https://www.linkedin.com/in/mattias-van-de-velde/
 date: "2018-03-16"
 categories:
     - R
@@ -9,6 +10,7 @@ tags:
     - meteorites
     - ggplot2
     - leaflet
+    - R
 output: html_document
 ---
 
