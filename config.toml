@@ -1,4 +1,4 @@
-baseurl = "/"
+baseurl = "https://altran-data-analytics.netlify.com/"
 title = "Data Analytics"
 theme = "test"
 languageCode = "en-us"
@@ -8,6 +8,7 @@ disqus_identifier = "altran-da"
 disqus_title = "Altran Data Analytics"
 googleAnalytics = "XXX"
 ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
+rssLimit = 20
 
 [Author]
 # name = "Data Analytics team at Altran Belgium"
