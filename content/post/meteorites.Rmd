@@ -121,7 +121,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Meteorite sightings 
 
-NASA has opened their database to the world at <https://data.nasa.gov/>, where they demonstrate their own test data and various measurements around the globe. One of the available datasets (which can be downloaded from [this location](https://data.nasa.gov/Space-Science/Meteorite-Landings/gh4g-9sfh "NASA Meteorite Landings Database")) contains data on over 45 000 meteorites, including their chemical composition, their mass, and the year they were discovered and the corresponding location. Some interesting geospatial visualisations and insights can be obtained from this database, so let's get going.
+Rogue NASA has opened their database to the world at <https://data.nasa.gov/>, where they demonstrate their own test data and various measurements around the globe. One of the available datasets (which can be downloaded from [this location](https://data.nasa.gov/Space-Science/Meteorite-Landings/gh4g-9sfh "NASA Meteorite Landings Database")) contains data on over 45 000 meteorites, including their chemical composition, their mass, and the year they were discovered and the corresponding location. Some interesting geospatial visualisations and insights can be obtained from this database, so let's get going.
 
 For the following workflow, the following packages are used:
 [`readr`](https://cran.r-project.org/package=readr), [`data.table`](https://cran.r-project.org/package=data.table), [`lubridate`](https://cran.r-project.org/package=lubridate), [`leaflet`](https://cran.r-project.org/package=leaflet), [`leaflet.extras`](https://cran.r-project.org/package=leaflet.extras) and [`maps`](https://cran.r-project.org/package=maps).
